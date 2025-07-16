@@ -1,0 +1,83 @@
+version: '3.8'
+
+services:
+  # Cell A Services
+  cell-a-gateway:
+    build: ./cell-a/gateway
+    ports:
+      - "8010:8010"
+    environment:
+      - CELL_ID=cell-a
+      - PORT=8010
+      - USER_SERVICE_URL=http://cell-a-user-service:8011
+      - PRODUCT_SERVICE_URL=http://cell-a-product-service:8012
+      - CELL_B_GATEWAY_URL=http://cell-b-gateway:8020
+    depends_on:
+      - cell-a-user-service
+      - cell-a-product-service
+    networks:
+      - cell-network
+
+  cell-a-user-service:
+    build: ./cell-a/user-service
+    ports:
+      - "8011:8011"
+    environment:
+      - CELL_ID=cell-a
+      - PORT=8011
+    networks:
+      - cell-network
+
+  cell-a-product-service:
+    build: ./cell-a/product-service
+    ports:
+      - "8012:8012"
+    environment:
+      - CELL_ID=cell-a
+      - PORT=8012
+    networks:
+      - cell-network
+
+  # Cell B Services
+  cell-b-gateway:
+    build: ./cell-b/gateway
+    ports:
+      - "8020:8020"
+    environment:
+      - CELL_ID=cell-b
+      - PORT=8020
+      - ORDER_SERVICE_URL=http://cell-b-order-service:8021
+      - PAYMENT_SERVICE_URL=http://cell-b-payment-service:8022
+      - CELL_A_GATEWAY_URL=http://cell-a-gateway:8010
+    depends_on:
+      - cell-b-order-service
+      - cell-b-payment-service
+    networks:
+      - cell-network
+
+  cell-b-order-service:
+    build: ./cell-b/order-service
+    ports:
+      - "8021:8021"
+    environment:
+      - CELL_ID=cell-b
+      - PORT=8021
+      - CELL_A_GATEWAY_URL=http://cell-a-gateway:8010
+      - PAYMENT_SERVICE_URL=http://cell-b-payment-service:8022
+    networks:
+      - cell-network
+
+  cell-b-payment-service:
+    build: ./cell-b/payment-service
+    ports:
+      - "8022:8022"
+    environment:
+      - CELL_ID=cell-b
+      - PORT=8022
+      - ORDER_SERVICE_URL=http://cell-b-order-service:8021
+    networks:
+      - cell-network
+
+networks:
+  cell-network:
+    driver: bridge

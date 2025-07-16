@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: cell-a
+  labels:
+    name: cell-a
+
+---
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: cell-b
+  labels:
+    name: cell-b

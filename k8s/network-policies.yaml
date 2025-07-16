@@ -1,0 +1,283 @@
+# Network Policy for Cell A - Only allow traffic through gateway
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: cell-a-network-policy
+  namespace: cell-a
+spec:
+  podSelector: {}
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  # Allow traffic from within the same cell (inter-service communication)
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: cell-a
+  # Allow traffic from Cell B gateway (cross-cell communication)
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: cell-b
+    - podSelector:
+        matchLabels:
+          component: gateway
+  # Allow traffic from ingress controller
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: ingress-nginx
+  # Allow traffic from kube-system (for health checks, DNS, etc.)
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: kube-system
+  egress:
+  # Allow all egress traffic (for external APIs, DNS, etc.)
+  - {}
+
+---
+# Network Policy for Cell B - Only allow traffic through gateway
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: cell-b-network-policy
+  namespace: cell-b
+spec:
+  podSelector: {}
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  # Allow traffic from within the same cell (inter-service communication)
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: cell-b
+  # Allow traffic from Cell A gateway (cross-cell communication)
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: cell-a
+    - podSelector:
+        matchLabels:
+          component: gateway
+  # Allow traffic from ingress controller
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: ingress-nginx
+  # Allow traffic from kube-system (for health checks, DNS, etc.)
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: kube-system
+  egress:
+  # Allow all egress traffic (for external APIs, DNS, etc.)
+  - {}
+
+---
+# More restrictive policy for Cell A services (not gateway)
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: cell-a-services-policy
+  namespace: cell-a
+spec:
+  podSelector:
+    matchLabels:
+      component: service
+  policyTypes:
+  - Ingress
+  ingress:
+  # Only allow traffic from Cell A gateway
+  - from:
+    - podSelector:
+        matchLabels:
+          component: gateway
+          cell: cell-a
+  # Allow traffic from kube-system (for health checks, DNS, etc.)
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: kube-system
+
+---
+# More restrictive policy for Cell B services (not gateway)
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: cell-b-services-policy
+  namespace: cell-b
+spec:
+  podSelector:
+    matchLabels:
+      component: service
+  policyTypes:
+  - Ingress
+  ingress:
+  # Only allow traffic from Cell B gateway
+  - from:
+    - podSelector:
+        matchLabels:
+          component: gateway
+          cell: cell-b
+  # Allow traffic from kube-system (for health checks, DNS, etc.)
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: kube-system
+
+---
+# Gateway-specific policy for Cell A
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: cell-a-gateway-policy
+  namespace: cell-a
+spec:
+  podSelector:
+    matchLabels:
+      component: gateway
+      cell: cell-a
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  # Allow traffic from ingress controller
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: ingress-nginx
+  # Allow traffic from Cell B gateway (for cross-cell communication)
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: cell-b
+    - podSelector:
+        matchLabels:
+          component: gateway
+  # Allow traffic from kube-system
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: kube-system
+  egress:
+  # Allow egress to own cell services
+  - to:
+    - podSelector:
+        matchLabels:
+          cell: cell-a
+  # Allow egress to Cell B gateway
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          name: cell-b
+    - podSelector:
+        matchLabels:
+          component: gateway
+  # Allow egress to kube-system (DNS, etc.)
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          name: kube-system
+  # Allow egress to internet (for external APIs)
+  - {}
+
+---
+# Gateway-specific policy for Cell B
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: cell-b-gateway-policy
+  namespace: cell-b
+spec:
+  podSelector:
+    matchLabels:
+      component: gateway
+      cell: cell-b
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  # Allow traffic from ingress controller
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: ingress-nginx
+  # Allow traffic from Cell A gateway (for cross-cell communication)
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: cell-a
+    - podSelector:
+        matchLabels:
+          component: gateway
+  # Allow traffic from kube-system
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: kube-system
+  egress:
+  # Allow egress to own cell services
+  - to:
+    - podSelector:
+        matchLabels:
+          cell: cell-b
+  # Allow egress to Cell A gateway
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          name: cell-a
+    - podSelector:
+        matchLabels:
+          component: gateway
+  # Allow egress to kube-system (DNS, etc.)
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          name: kube-system
+  # Allow egress to internet (for external APIs)
+  - {}
+
+---
+# Default deny policy for external access to services
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: deny-external-to-services
+  namespace: cell-a
+spec:
+  podSelector:
+    matchLabels:
+      component: service
+  policyTypes:
+  - Ingress
+  ingress:
+  # Explicitly deny traffic from outside the cluster
+  - from:
+    - podSelector: {}
+    - namespaceSelector:
+        matchLabels:
+          name: cell-a
+
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: deny-external-to-services
+  namespace: cell-b
+spec:
+  podSelector:
+    matchLabels:
+      component: service
+  policyTypes:
+  - Ingress
+  ingress:
+  # Explicitly deny traffic from outside the cluster
+  - from:
+    - podSelector: {}
+    - namespaceSelector:
+        matchLabels:
+          name: cell-b

@@ -1,0 +1,276 @@
+{
+    "metrics": {
+        "iterations": {
+            "count": 11,
+            "rate": 0.5018658351594859
+        },
+        "http_req_receiving": {
+            "avg": 0,
+            "min": 0,
+            "med": 0,
+            "max": 0,
+            "p(90)": 0,
+            "p(95)": 0
+        },
+        "group_duration": {
+            "avg": 28.468809230769224,
+            "min": 20.22958,
+            "med": 22.865091,
+            "max": 88.428741,
+            "p(90)": 30.9982116,
+            "p(95)": 54.38772899999992
+        },
+        "iteration_duration": {
+            "avg": 2546.1961141818183,
+            "min": 1340.349033,
+            "med": 2696.620779,
+            "max": 3950.089542,
+            "p(90)": 3785.353884,
+            "p(95)": 3867.721713
+        },
+        "response_time": {
+            "avg": 0,
+            "min": 0,
+            "med": 0,
+            "max": 0,
+            "p(90)": 0,
+            "p(95)": 0
+        },
+        "http_req_tls_handshaking": {
+            "avg": 0,
+            "min": 0,
+            "med": 0,
+            "max": 0,
+            "p(90)": 0,
+            "p(95)": 0
+        },
+        "vus": {
+            "value": 2,
+            "min": 1,
+            "max": 2
+        },
+        "http_reqs": {
+            "count": 16,
+            "rate": 0.7299866693228886
+        },
+        "requests_total": {
+            "count": 16,
+            "rate": 0.7299866693228886
+        },
+        "checks": {
+            "passes": 16,
+            "fails": 16,
+            "value": 0.5
+        },
+        "data_received": {
+            "count": 0,
+            "rate": 0
+        },
+        "http_req_blocked": {
+            "max": 0,
+            "p(90)": 0,
+            "p(95)": 0,
+            "avg": 0,
+            "min": 0,
+            "med": 0
+        },
+        "http_req_duration": {
+            "max": 0,
+            "p(90)": 0,
+            "p(95)": 0,
+            "avg": 0,
+            "min": 0,
+            "med": 0,
+            "thresholds": {
+                "p(95)<2000": false
+            }
+        },
+        "errors": {
+            "passes": 16,
+            "fails": 0,
+            "thresholds": {
+                "rate<0.1": true
+            },
+            "value": 1
+        },
+        "http_req_connecting": {
+            "med": 0,
+            "max": 0,
+            "p(90)": 0,
+            "p(95)": 0,
+            "avg": 0,
+            "min": 0
+        },
+        "data_sent": {
+            "count": 0,
+            "rate": 0
+        },
+        "http_req_sending": {
+            "p(95)": 0,
+            "avg": 0,
+            "min": 0,
+            "med": 0,
+            "max": 0,
+            "p(90)": 0
+        },
+        "http_req_waiting": {
+            "p(95)": 0,
+            "avg": 0,
+            "min": 0,
+            "med": 0,
+            "max": 0,
+            "p(90)": 0
+        },
+        "vus_max": {
+            "value": 200,
+            "min": 200,
+            "max": 200
+        },
+        "http_req_failed": {
+            "passes": 16,
+            "fails": 0,
+            "thresholds": {
+                "rate<0.05": true
+            },
+            "value": 1
+        }
+    },
+    "root_group": {
+        "groups": {
+            "End-to-End Order Flow": {
+                "path": "::End-to-End Order Flow",
+                "id": "c7b283daa0b5619b08614a04c36e1a0e",
+                "groups": {},
+                "checks": {
+                        "POST http://cell-a-gateway.cell-a.svc.cluster.local:8010/users status is 201": {
+                            "name": "POST http://cell-a-gateway.cell-a.svc.cluster.local:8010/users status is 201",
+                            "path": "::End-to-End Order Flow::POST http://cell-a-gateway.cell-a.svc.cluster.local:8010/users status is 201",
+                            "id": "b27a38284a8b8e2ea8ed87c280d0d2ca",
+                            "passes": 0,
+                            "fails": 4
+                        },
+                        "POST http://cell-a-gateway.cell-a.svc.cluster.local:8010/users response time < 5000ms": {
+                            "id": "bce848daa2ab3ea5fc05312d149eee92",
+                            "passes": 4,
+                            "fails": 0,
+                            "name": "POST http://cell-a-gateway.cell-a.svc.cluster.local:8010/users response time < 5000ms",
+                            "path": "::End-to-End Order Flow::POST http://cell-a-gateway.cell-a.svc.cluster.local:8010/users response time < 5000ms"
+                        }
+                    },
+                "name": "End-to-End Order Flow"
+            },
+            "User Management Flow": {
+                "path": "::User Management Flow",
+                "id": "12aea1749de7ecd9a789f84dc6077f4e",
+                "groups": {},
+                "checks": {
+                        "POST http://cell-a-gateway.cell-a.svc.cluster.local:8010/users status is 201": {
+                            "id": "31e8b5eba6f4d6861c9c8c4ca367f239",
+                            "passes": 0,
+                            "fails": 6,
+                            "name": "POST http://cell-a-gateway.cell-a.svc.cluster.local:8010/users status is 201",
+                            "path": "::User Management Flow::POST http://cell-a-gateway.cell-a.svc.cluster.local:8010/users status is 201"
+                        },
+                        "POST http://cell-a-gateway.cell-a.svc.cluster.local:8010/users response time < 5000ms": {
+                            "fails": 0,
+                            "name": "POST http://cell-a-gateway.cell-a.svc.cluster.local:8010/users response time < 5000ms",
+                            "path": "::User Management Flow::POST http://cell-a-gateway.cell-a.svc.cluster.local:8010/users response time < 5000ms",
+                            "id": "19c3192ec7458bf5e8c0444deca6ccde",
+                            "passes": 6
+                        }
+                    },
+                "name": "User Management Flow"
+            },
+            "Product Management Flow": {
+                "name": "Product Management Flow",
+                "path": "::Product Management Flow",
+                "id": "a4c47029555d639d01efccbfbdff5c91",
+                "groups": {},
+                "checks": {
+                        "POST http://cell-a-gateway.cell-a.svc.cluster.local:8010/products status is 201": {
+                            "path": "::Product Management Flow::POST http://cell-a-gateway.cell-a.svc.cluster.local:8010/products status is 201",
+                            "id": "7155b0cdf5cd7fc343b4e8cb4f8c78f2",
+                            "passes": 0,
+                            "fails": 2,
+                            "name": "POST http://cell-a-gateway.cell-a.svc.cluster.local:8010/products status is 201"
+                        },
+                        "POST http://cell-a-gateway.cell-a.svc.cluster.local:8010/products response time < 5000ms": {
+                            "id": "6ac367f5122d6e8e4d3e4db9871b9602",
+                            "passes": 2,
+                            "fails": 0,
+                            "name": "POST http://cell-a-gateway.cell-a.svc.cluster.local:8010/products response time < 5000ms",
+                            "path": "::Product Management Flow::POST http://cell-a-gateway.cell-a.svc.cluster.local:8010/products response time < 5000ms"
+                        }
+                    }
+            },
+            "Health Check Flow": {
+                "checks": {
+                    "GET http://cell-a-gateway.cell-a.svc.cluster.local:8010/health status is 200": {
+                        "path": "::Health Check Flow::GET http://cell-a-gateway.cell-a.svc.cluster.local:8010/health status is 200",
+                        "id": "75f72e6330b290143028da0aaa78da5f",
+                        "passes": 0,
+                        "fails": 1,
+                        "name": "GET http://cell-a-gateway.cell-a.svc.cluster.local:8010/health status is 200"
+                    },
+                    "GET http://cell-a-gateway.cell-a.svc.cluster.local:8010/health response time < 5000ms": {
+                        "path": "::Health Check Flow::GET http://cell-a-gateway.cell-a.svc.cluster.local:8010/health response time < 5000ms",
+                        "id": "9dc0e4510dbe22b87af96043b969e5d5",
+                        "passes": 1,
+                        "fails": 0,
+                        "name": "GET http://cell-a-gateway.cell-a.svc.cluster.local:8010/health response time < 5000ms"
+                    },
+                    "GET http://cell-b-gateway.cell-b.svc.cluster.local:8020/health status is 200": {
+                        "name": "GET http://cell-b-gateway.cell-b.svc.cluster.local:8020/health status is 200",
+                        "path": "::Health Check Flow::GET http://cell-b-gateway.cell-b.svc.cluster.local:8020/health status is 200",
+                        "id": "e933a91dff5337f70102d691b818a423",
+                        "passes": 0,
+                        "fails": 1
+                    },
+                    "GET http://cell-b-gateway.cell-b.svc.cluster.local:8020/health response time < 5000ms": {
+                        "name": "GET http://cell-b-gateway.cell-b.svc.cluster.local:8020/health response time < 5000ms",
+                        "path": "::Health Check Flow::GET http://cell-b-gateway.cell-b.svc.cluster.local:8020/health response time < 5000ms",
+                        "id": "923e0d00e5eeecdcf63538a19546bd36",
+                        "passes": 1,
+                        "fails": 0
+                    },
+                    "GET http://cell-a-gateway.cell-a.svc.cluster.local:8010/readiness status is 200": {
+                        "name": "GET http://cell-a-gateway.cell-a.svc.cluster.local:8010/readiness status is 200",
+                        "path": "::Health Check Flow::GET http://cell-a-gateway.cell-a.svc.cluster.local:8010/readiness status is 200",
+                        "id": "4f40abdb7279ac3f56d6ef685c8d9bf0",
+                        "passes": 0,
+                        "fails": 1
+                    },
+                    "GET http://cell-a-gateway.cell-a.svc.cluster.local:8010/readiness response time < 5000ms": {
+                        "name": "GET http://cell-a-gateway.cell-a.svc.cluster.local:8010/readiness response time < 5000ms",
+                        "path": "::Health Check Flow::GET http://cell-a-gateway.cell-a.svc.cluster.local:8010/readiness response time < 5000ms",
+                        "id": "697efe03c70642928f791a1cf34e6e88",
+                        "passes": 1,
+                        "fails": 0
+                    },
+                    "GET http://cell-b-gateway.cell-b.svc.cluster.local:8020/readiness status is 200": {
+                        "name": "GET http://cell-b-gateway.cell-b.svc.cluster.local:8020/readiness status is 200",
+                        "path": "::Health Check Flow::GET http://cell-b-gateway.cell-b.svc.cluster.local:8020/readiness status is 200",
+                        "id": "7c4152fff1dbb28111c3f8ff3cc6c909",
+                        "passes": 0,
+                        "fails": 1
+                    },
+                    "GET http://cell-b-gateway.cell-b.svc.cluster.local:8020/readiness response time < 5000ms": {
+                        "path": "::Health Check Flow::GET http://cell-b-gateway.cell-b.svc.cluster.local:8020/readiness response time < 5000ms",
+                        "id": "13cbd50665911820649ffea52b755625",
+                        "passes": 1,
+                        "fails": 0,
+                        "name": "GET http://cell-b-gateway.cell-b.svc.cluster.local:8020/readiness response time < 5000ms"
+                    }
+                },
+                "name": "Health Check Flow",
+                "path": "::Health Check Flow",
+                "id": "3d74754c382b8595b8b7be906d013f53",
+                "groups": {}
+            }
+        },
+        "checks": {},
+        "name": "",
+        "path": "",
+        "id": "d41d8cd98f00b204e9800998ecf8427e"
+    }
+}

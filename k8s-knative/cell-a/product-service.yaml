@@ -7,25 +7,28 @@ data:
   CELL_ID: "cell-a"
   PORT: "8012"
 ---
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: serving.knative.dev/v1
+kind: Service
 metadata:
   name: cell-a-product-service
   namespace: cell-a
   labels:
     cell: cell-a
     component: service
+  annotations:
+    autoscaling.knative.dev/minScale: "0"
+    autoscaling.knative.dev/maxScale: "10"
+    autoscaling.knative.dev/target: "1"
+    autoscaling.knative.dev/scaleDownDelay: "60s"
+    autoscaling.knative.dev/scaleToZeroPodRetentionPeriod: "0s"
 spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: cell-a-product-service
   template:
     metadata:
       labels:
-        app: cell-a-product-service
         cell: cell-a
         component: service
+      annotations:
+        autoscaling.knative.dev/scaleDownDelay: "60s"
     spec:
       containers:
       - name: product-service
@@ -35,6 +38,18 @@ spec:
         envFrom:
         - configMapRef:
             name: cell-a-product-service-config
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8012
+          initialDelaySeconds: 10
+          periodSeconds: 30
+        readinessProbe:
+          httpGet:
+            path: /readiness
+            port: 8012
+          initialDelaySeconds: 5
+          periodSeconds: 10
         resources:
           requests:
             memory: "64Mi"
@@ -42,23 +57,3 @@ spec:
           limits:
             memory: "128Mi"
             cpu: "200m"
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: cell-a-product-service
-  namespace: cell-a
-  labels:
-    cell: cell-a
-    component: service
-  annotations:
-    scale-to-zero/scale-down-time: "60"
-    scale-to-zero/reference: "deployment/cell-a/cell-a-product-service"
-spec:
-  selector:
-    app: cell-a-product-service
-  ports:
-  - port: 8012
-    targetPort: 8012
-    name: http
-  type: ClusterIP

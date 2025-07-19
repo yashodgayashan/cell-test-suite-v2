@@ -1,0 +1,190 @@
+{
+    "root_group": {
+        "name": "",
+        "path": "",
+        "id": "d41d8cd98f00b204e9800998ecf8427e",
+        "groups": {
+            "End-to-End Order Flow": {
+                "name": "End-to-End Order Flow",
+                "path": "::End-to-End Order Flow",
+                "id": "c7b283daa0b5619b08614a04c36e1a0e",
+                "groups": {},
+                "checks": {
+                        "POST http://cell-a.local/users status is 201": {
+                            "name": "POST http://cell-a.local/users status is 201",
+                            "path": "::End-to-End Order Flow::POST http://cell-a.local/users status is 201",
+                            "id": "6c1b8644ebc10c95c42f4e18568a624f",
+                            "passes": 0,
+                            "fails": 2
+                        },
+                        "POST http://cell-a.local/users response time < 5000ms": {
+                            "fails": 0,
+                            "name": "POST http://cell-a.local/users response time < 5000ms",
+                            "path": "::End-to-End Order Flow::POST http://cell-a.local/users response time < 5000ms",
+                            "id": "73a1fcf3075c525a7a93b60c7dad2ea4",
+                            "passes": 2
+                        }
+                    }
+            },
+            "User Management Flow": {
+                "groups": {},
+                "checks": {
+                        "POST http://cell-a.local/users status is 201": {
+                            "path": "::User Management Flow::POST http://cell-a.local/users status is 201",
+                            "id": "3d9b3ccaddc294b0a17d071eace0c5de",
+                            "passes": 0,
+                            "fails": 2,
+                            "name": "POST http://cell-a.local/users status is 201"
+                        },
+                        "POST http://cell-a.local/users response time < 5000ms": {
+                            "name": "POST http://cell-a.local/users response time < 5000ms",
+                            "path": "::User Management Flow::POST http://cell-a.local/users response time < 5000ms",
+                            "id": "6622dedc9eb9207be8e533063acbe4e0",
+                            "passes": 2,
+                            "fails": 0
+                        }
+                    },
+                "name": "User Management Flow",
+                "path": "::User Management Flow",
+                "id": "12aea1749de7ecd9a789f84dc6077f4e"
+            }
+        },
+        "checks": {}
+    },
+    "metrics": {
+        "http_req_failed": {
+            "passes": 4,
+            "fails": 0,
+            "thresholds": {
+                "rate<0.05": true
+            },
+            "value": 1
+        },
+        "requests_total": {
+            "rate": 0.5172282513439074,
+            "count": 4
+        },
+        "iterations": {
+            "count": 3,
+            "rate": 0.38792118850793056
+        },
+        "data_received": {
+            "count": 0,
+            "rate": 0
+        },
+        "http_req_waiting": {
+            "max": 0,
+            "p(90)": 0,
+            "p(95)": 0,
+            "avg": 0,
+            "min": 0,
+            "med": 0
+        },
+        "response_time": {
+            "max": 0,
+            "p(90)": 0,
+            "p(95)": 0,
+            "avg": 0,
+            "min": 0,
+            "med": 0
+        },
+        "vus_max": {
+            "value": 200,
+            "min": 200,
+            "max": 200
+        },
+        "http_req_tls_handshaking": {
+            "avg": 0,
+            "min": 0,
+            "med": 0,
+            "max": 0,
+            "p(90)": 0,
+            "p(95)": 0
+        },
+        "http_req_receiving": {
+            "med": 0,
+            "max": 0,
+            "p(90)": 0,
+            "p(95)": 0,
+            "avg": 0,
+            "min": 0
+        },
+        "vus": {
+            "value": 1,
+            "min": 1,
+            "max": 1
+        },
+        "group_duration": {
+            "p(95)": 43.493972299999996,
+            "avg": 28.831508499999998,
+            "min": 18.473327,
+            "med": 25.5249825,
+            "max": 45.802742,
+            "p(90)": 41.185202600000004
+        },
+        "iteration_duration": {
+            "p(90)": 2937.8824722,
+            "p(95)": 3133.4330870999997,
+            "avg": 1957.5836283333335,
+            "min": 1170.28963,
+            "med": 1373.477553,
+            "max": 3328.983702
+        },
+        "http_reqs": {
+            "count": 4,
+            "rate": 0.5172282513439074
+        },
+        "http_req_duration": {
+            "avg": 0,
+            "min": 0,
+            "med": 0,
+            "max": 0,
+            "p(90)": 0,
+            "p(95)": 0,
+            "thresholds": {
+                "p(95)<2000": false
+            }
+        },
+        "http_req_connecting": {
+            "avg": 0,
+            "min": 0,
+            "med": 0,
+            "max": 0,
+            "p(90)": 0,
+            "p(95)": 0
+        },
+        "http_req_sending": {
+            "avg": 0,
+            "min": 0,
+            "med": 0,
+            "max": 0,
+            "p(90)": 0,
+            "p(95)": 0
+        },
+        "errors": {
+            "fails": 0,
+            "passes": 4,
+            "thresholds": {
+                "rate<0.1": true
+            },
+            "value": 1
+        },
+        "http_req_blocked": {
+            "min": 0,
+            "med": 0,
+            "max": 0,
+            "p(90)": 0,
+            "p(95)": 0,
+            "avg": 0
+        },
+        "checks": {
+            "fails": 4,
+            "passes": 4,
+            "value": 0.5
+        },
+        "data_sent": {
+            "rate": 0,
+            "count": 0
+        }
+    }
+}

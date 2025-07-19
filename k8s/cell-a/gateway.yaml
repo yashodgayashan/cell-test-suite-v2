@@ -30,6 +30,18 @@ spec:
         cell: cell-a
         component: gateway
     spec:
+      serviceAccountName: cell-a-service-account
+      initContainers:
+      - name: prewarm-dependencies
+        image: curlimages/curl:latest
+        command: 
+          - /bin/sh
+          - -c
+          - |
+            echo "Pre-warming dependent services..."
+            curl --max-time 30 --retry 5 --retry-delay 2 http://cell-a-user-service.cell-a:8011/health || echo "User service not ready"
+            curl --max-time 30 --retry 5 --retry-delay 2 http://cell-a-product-service.cell-a:8012/health || echo "Product service not ready" 
+            echo "Pre-warming completed"
       containers:
       - name: gateway
         image: yashodperera/cell-a-gateway
@@ -38,18 +50,6 @@ spec:
         envFrom:
         - configMapRef:
             name: cell-a-gateway-config
-        livenessProbe:
-          httpGet:
-            path: /health
-            port: 8010
-          initialDelaySeconds: 10
-          periodSeconds: 30
-        readinessProbe:
-          httpGet:
-            path: /readiness
-            port: 8010
-          initialDelaySeconds: 5
-          periodSeconds: 10
         resources:
           requests:
             memory: "64Mi"
@@ -66,6 +66,11 @@ metadata:
   labels:
     cell: cell-a
     component: gateway
+  annotations:
+    scale-to-zero/scale-down-time: "10"
+    scale-to-zero/reference: "deployment/cell-a/cell-a-gateway"
+    scale-to-zero/dependencies: "cell-a-user-service,cell-a-product-service"
+    scale-to-zero/cascade-scale: "true"
 spec:
   selector:
     app: cell-a-gateway

@@ -1,0 +1,35 @@
+apiVersion: networking.knative.dev/v1
+kind: Ingress
+metadata:
+  name: cell-a-knative-ingress
+  namespace: cell-a
+  annotations:
+    networking.knative.dev/ingress.class: "kourier.ingress.networking.knative.dev"
+spec:
+  rules:
+  - hosts:
+    - cell-a.local
+    http:
+      paths:
+      - splits:
+        - percent: 100
+          serviceName: cell-a-gateway
+        path: /
+---
+apiVersion: networking.knative.dev/v1
+kind: Ingress
+metadata:
+  name: cell-b-knative-ingress
+  namespace: cell-b
+  annotations:
+    networking.knative.dev/ingress.class: "kourier.ingress.networking.knative.dev"
+spec:
+  rules:
+  - hosts:
+    - cell-b.local
+    http:
+      paths:
+      - splits:
+        - percent: 100
+          serviceName: cell-b-gateway
+        path: / 

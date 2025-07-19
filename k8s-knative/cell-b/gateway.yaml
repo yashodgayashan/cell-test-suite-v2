@@ -10,25 +10,28 @@ data:
   PAYMENT_SERVICE_URL: "http://cell-b-payment-service.cell-b.svc.cluster.local:8022"
   CELL_A_GATEWAY_URL: "http://cell-a-gateway.cell-a.svc.cluster.local:8010"
 ---
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: serving.knative.dev/v1
+kind: Service
 metadata:
   name: cell-b-gateway
   namespace: cell-b
   labels:
     cell: cell-b
     component: gateway
+  annotations:
+    autoscaling.knative.dev/minScale: "0"
+    autoscaling.knative.dev/maxScale: "10"
+    autoscaling.knative.dev/target: "1"
+    autoscaling.knative.dev/scaleDownDelay: "60s"
+    autoscaling.knative.dev/scaleToZeroPodRetentionPeriod: "0s"
 spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: cell-b-gateway
   template:
     metadata:
       labels:
-        app: cell-b-gateway
         cell: cell-b
         component: gateway
+      annotations:
+        autoscaling.knative.dev/scaleDownDelay: "60s"
     spec:
       containers:
       - name: gateway 
@@ -38,6 +41,18 @@ spec:
         envFrom:
         - configMapRef:
             name: cell-b-gateway-config
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8020
+          initialDelaySeconds: 10
+          periodSeconds: 30
+        readinessProbe:
+          httpGet:
+            path: /readiness
+            port: 8020
+          initialDelaySeconds: 5
+          periodSeconds: 10
         resources:
           requests:
             memory: "64Mi"
@@ -45,23 +60,3 @@ spec:
           limits:
             memory: "128Mi"
             cpu: "200m"
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: cell-b-gateway
-  namespace: cell-b
-  labels:
-    cell: cell-b
-    component: gateway
-  annotations:
-    scale-to-zero/scale-down-time: "60"
-    scale-to-zero/reference: "deployment/cell-b/cell-b-gateway"
-spec:
-  selector:
-    app: cell-b-gateway
-  ports:
-  - port: 8020
-    targetPort: 8020
-    name: http
-  type: ClusterIP

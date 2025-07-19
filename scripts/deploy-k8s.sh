@@ -17,8 +17,8 @@ kubectl apply -f k8s/cell-b/gateway.yaml
 kubectl apply -f k8s/cell-b/order-service.yaml
 kubectl apply -f k8s/cell-b/payment-service.yaml
 
-echo "Applying network policies for cell isolation..."
-kubectl apply -f k8s/network-policies.yaml
+# echo "Applying network policies for cell isolation..."
+# kubectl apply -f k8s/network-policies.yaml
 
 # Deploy ingress
 echo "Deploying ingress for both cells..."
@@ -41,7 +41,7 @@ echo
 echo "=== Cell B Status ==="
 kubectl get pods,services -n cell-b
 
-echo
-echo "=== Network Policies ==="
-kubectl get networkpolicies -n cell-a
-kubectl get networkpolicies -n cell-b
+# echo
+# echo "=== Network Policies ==="
+# kubectl get networkpolicies -n cell-a
+# kubectl get networkpolicies -n cell-b

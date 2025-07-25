@@ -1,0 +1,32 @@
+graph TB
+    subgraph "External Traffic"
+        EXT[External Requests]
+    end
+    
+    subgraph "KEDA HTTP Interceptor"
+        INT[HTTP Interceptor<br/>keda-add-on-http-interceptor-proxy]
+    end
+    
+    subgraph "Cell A Namespace"
+        AGW[Gateway<br/>⚡ Scale 0→1]
+        AUS[User Service<br/>🔄 Always Running]
+        APS[Product Service<br/>🔄 Always Running]
+    end
+    
+    subgraph "Cell B Namespace"
+        BGW[Gateway<br/>⚡ Scale 0→1]
+        BOS[Order Service<br/>🔄 Always Running]
+        BPS[Payment Service<br/>🔄 Always Running]
+    end
+    
+    EXT --> INT
+    INT --> AGW
+    INT --> BGW
+    
+    AGW --> AUS
+    AGW --> APS
+    BGW --> BOS
+    BGW --> BPS
+    
+    AGW -.->|"Cross-cell<br/>(needs Host headers)"| INT
+    BGW -.->|"Cross-cell<br/>(needs Host headers)"| INT
